@@ -1,0 +1,170 @@
+basePath: /api
+definitions:
+  dto.ConvertCurrencyResp:
+    properties:
+      course:
+        example: 1.444655e-05
+        type: number
+    type: object
+  dto.Currency:
+    properties:
+      code:
+        example: BTC
+        type: string
+      isAvailable:
+        type: boolean
+      name:
+        example: Bitcoin
+        type: string
+      type:
+        description: |-
+          Type
+          * 1 - Crypto type
+          * 2 - Fiat type
+        enum:
+        - 1
+        - 2
+        type: integer
+    required:
+    - code
+    - isAvailable
+    - name
+    - type
+    type: object
+  httputil.HTTPError:
+    properties:
+      businessCode:
+        type: integer
+      code:
+        type: integer
+      text:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a server Currency API
+  title: Swagger Currency API
+  version: "1.0"
+paths:
+  /v1/currencies:
+    post:
+      consumes:
+      - application/json
+      description: Create new currency
+      parameters:
+      - description: CreateCurrencyDTO
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Currency'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Create new currency
+      tags:
+      - currency
+  /v1/currencies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete currency
+      parameters:
+      - description: CurrencyID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Delete currency
+      tags:
+      - currency
+    put:
+      consumes:
+      - application/json
+      description: Update currency
+      parameters:
+      - description: CurrencyID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: UpdateCurrencyDTO
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Currency'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Update currency
+      tags:
+      - currency
+  /v1/currencies/convert:
+    get:
+      consumes:
+      - application/json
+      description: Convert course for currencies
+      parameters:
+      - example: 1
+        in: query
+        name: amount
+        required: true
+        type: number
+      - example: USD
+        in: query
+        name: from
+        required: true
+        type: string
+      - example: BTC
+        in: query
+        name: to
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ConvertCurrencyResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Convert course for currencies
+      tags:
+      - currency
+swagger: "2.0"

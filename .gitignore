@@ -1,0 +1,8 @@
+.env
+.idea
+profile.cov.tmp
+profile.cov
+/bin
+!.gitignore
+!.env.example
+.DS_Store

@@ -1,0 +1,46 @@
+run:
+  go: "1.22"
+  build-tags:
+    - mock
+    - integration
+linters:
+  enable-all: true
+  disable:
+    - varnamelen
+    - tagalign
+    - paralleltest
+    - ireturn
+    - godox
+    - gomnd
+    - execinquery
+linters-settings:
+  misspell:
+    locale: US
+  gci:
+    sections:
+      - Standard
+      - Default
+  lll:
+    line-length: 140
+  exhaustruct:
+    exclude:
+      - '.*cobra\.Command.*'
+  depguard:
+    rules:
+      main:
+        allow:
+          - $gostd
+          - github.com
+        deny:
+          - pkg: "emperror.dev/errors"
+            desc: should be replaced by "github.com/pkg/errors"
+issues:
+  exclude-files:
+    - "_test.go"
+  exclude-rules:
+    - linters:
+        - lll
+      source: "^//go:generate "
+    - path: "internal/shutdown/shutdown.go"
+      linters:
+        - unused
